@@ -53,6 +53,7 @@ public class UserController
     }
 
 
+
     @PostMapping(value = "/user",
         consumes = "application/json")
     public ResponseEntity<?> addNewUser(

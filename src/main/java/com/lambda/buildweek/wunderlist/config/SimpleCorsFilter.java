@@ -1,4 +1,3 @@
-/*
 package com.lambda.buildweek.wunderlist.config;
 
 import org.springframework.core.Ordered;
@@ -15,12 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-*/
-/**
- * Spring uses filters to manage web traffic. Here we manually add a CORS (Cross-Origin Resource Sharing) filter to the chain.
- * Using the Order annotation, we tell Spring this is the most important filter. If this filter blocks a request,
- * don't do anything else. Just block the request.
- *//*
+
+// * Spring uses filters to manage web traffic. Here we manually add a CORS (Cross-Origin Resource Sharing) filter to the chain.
+// * Using the Order annotation, we tell Spring this is the most important filter. If this filter blocks a request,
+// * don't do anything else. Just block the request.
+
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -73,4 +71,3 @@ public class SimpleCorsFilter
     }
 }
 
-*/

@@ -1,6 +1,8 @@
 package com.lambda.buildweek.wunderlist.controllers;
 
+import com.lambda.buildweek.wunderlist.models.Role;
 import com.lambda.buildweek.wunderlist.models.User;
+import com.lambda.buildweek.wunderlist.models.UserMinimum;
 import com.lambda.buildweek.wunderlist.models.UserRoles;
 import com.lambda.buildweek.wunderlist.services.RoleService;
 import com.lambda.buildweek.wunderlist.services.UserService;
@@ -63,7 +65,7 @@ public class OpenController
         HttpServletRequest httpServletRequest,
         @Valid
         @RequestBody
-            User user)
+            UserMinimum user)
         throws
         URISyntaxException
     {
@@ -74,12 +76,15 @@ public class OpenController
         newuser.setPassword(user.getPassword());
 
         // add the default role of user
-        Set<UserRoles> newRoles = new HashSet<>();
+        /*Set<UserRoles> newRoles = new HashSet<>();
         newRoles.add(new UserRoles(newuser,
             roleService.findByName("user")));
-        newuser.setRoles(newRoles);
+        newuser.setRoles(newRoles);*/
 
-        newuser = userService.save(newuser);
+        //Role newRole = roleService.findByName("user");
+        //newuser.getRoles().add(new UserRoles(newuser, newRole));
+
+        userService.saveNewUser(newuser);
 
 
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -90,7 +95,15 @@ public class OpenController
 
 
         RestTemplate restTemplate = new RestTemplate();
-        String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
+//        String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
+
+        String port = "";
+        if (httpServletRequest.getServerName()
+            .equalsIgnoreCase("localhost"))
+        {
+            port = ":" + httpServletRequest.getLocalPort();
+        }
+        String requestURI = "http://" + httpServletRequest.getServerName() + port + "/login";
 
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
@@ -107,9 +120,9 @@ public class OpenController
         map.add("scope",
             "read write trust");
         map.add("username",
-            user.getUsername());
+            newuser.getUsername());
         map.add("password",
-            user.getPassword());
+            newuser.getPassword());
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
             headers);

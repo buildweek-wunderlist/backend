@@ -40,7 +40,8 @@ public class ResourceServerConfig
             .permitAll()
             .antMatchers("/users/**",
                 "/oauth/revoke-token",
-                "/logout"
+                "/logout",
+                "/lists/**"
             )
             .authenticated()
             .antMatchers("/roles/**")

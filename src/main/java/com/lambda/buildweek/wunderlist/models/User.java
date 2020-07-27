@@ -37,9 +37,11 @@ public class User extends Auditable
     @JsonIgnoreProperties(value = "user", allowSetters = true)
     private Set<UserRoles> roles = new HashSet<>();
 
-    @ManyToMany(mappedBy = "users")
-    @JsonIgnoreProperties("users")
-    private Set<ToDoList> todolists = new HashSet<>();
+    @OneToMany(mappedBy = "user",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true)
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    private Set<UserToDoList> lists = new HashSet<>();
 
 
     public User()
@@ -161,5 +163,15 @@ public class User extends Auditable
         }
 
         return rtnList;
+    }
+
+    public Set<UserToDoList> getLists()
+    {
+        return lists;
+    }
+
+    public void setLists(Set<UserToDoList> lists)
+    {
+        this.lists = lists;
     }
 }

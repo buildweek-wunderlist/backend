@@ -1,8 +1,6 @@
 package com.lambda.buildweek.wunderlist.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,22 +9,46 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "TODOLISTS")
+@Table(name = "todolists")
 public class ToDoList extends Auditable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long todolistid;
 
+    @Column
+    private String name;
+
     @OneToMany(mappedBy = "todolist",
     cascade = CascadeType.ALL,
     orphanRemoval = true)
-    @JsonIgnoreProperties(value = "todolists")
+    @JsonIgnoreProperties(value = "toDoList")
     private List<Todo> todos = new ArrayList<>();
 
-    @ManyToMany
-    @JsonIgnoreProperties("todolists")
-    private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "todolist",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
+    @JsonIgnoreProperties(value = "todolist", allowSetters = true)
+    private Set<UserToDoList> users = new HashSet<>();
+
+    public ToDoList()
+    {
+    }
+
+    public ToDoList(String name)
+    {
+        this.name = name;
+    }
+
+    public ToDoList(
+        String name,
+        List<Todo> todos,
+        Set<UserToDoList> users)
+    {
+        this.name = name;
+        this.todos = todos;
+        this.users = users;
+    }
 
     public long getTodolistid()
     {
@@ -48,23 +70,23 @@ public class ToDoList extends Auditable
         this.todos = todos;
     }
 
-    public Set<User> getUsers()
+    public Set<UserToDoList> getUsers()
     {
         return users;
     }
 
-    public void setUsers(Set<User> users)
+    public void setUsers(Set<UserToDoList> users)
     {
         this.users = users;
     }
 
-    public ToDoList(
-        Set<User> users)
+    public String getName()
     {
-        this.users = users;
+        return name;
     }
 
-    public ToDoList()
+    public void setName(String name)
     {
+        this.name = name;
     }
 }
