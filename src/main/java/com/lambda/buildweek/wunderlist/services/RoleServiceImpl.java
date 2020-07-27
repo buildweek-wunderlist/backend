@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService
     @Override
     public Role findByName(String name)
     {
-        return null;
+        return rolerepos.findByNameIgnoreCase(name);
     }
 
     @Transactional

@@ -4,6 +4,7 @@ package com.lambda.buildweek.wunderlist.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,9 @@ public class Todo extends Auditable
     String description;
 
     @Column
+    String duedate;
+
+    @Column
     private boolean completed;
 
     @ManyToOne
@@ -33,13 +37,22 @@ public class Todo extends Auditable
     {
     }
 
-    public Todo( ToDoList todolist,
-                 String description
+    public Todo(String description, ToDoList todolist
     )
     {
         this.description = description;
         this.todolist = todolist;
         this.completed = false;
+    }
+
+    public Todo(
+        String description,
+        String duedate,
+        ToDoList todolist)
+    {
+        this.description = description;
+        this.duedate = duedate;
+        this.todolist = todolist;
     }
 
     public long getTodoid()
@@ -62,7 +75,7 @@ public class Todo extends Auditable
         this.description = description;
     }
 
-    public boolean isCompleted()
+    public boolean getCompleted()
     {
         return completed;
     }

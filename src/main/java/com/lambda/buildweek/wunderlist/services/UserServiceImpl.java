@@ -1,9 +1,7 @@
 package com.lambda.buildweek.wunderlist.services;
 
 import com.lambda.buildweek.wunderlist.exceptions.ResourceNotFoundException;
-import com.lambda.buildweek.wunderlist.models.Role;
-import com.lambda.buildweek.wunderlist.models.User;
-import com.lambda.buildweek.wunderlist.models.UserRoles;
+import com.lambda.buildweek.wunderlist.models.*;
 import com.lambda.buildweek.wunderlist.repositories.UserRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,9 @@ public class UserServiceImpl implements UserService
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private ToDoListService toDoListService;
 
     @Override
     public List<User> findAll()
@@ -57,6 +58,26 @@ public class UserServiceImpl implements UserService
 
     }
 
+
+    @Transactional
+    @Override
+    public void saveNewUser(User user)
+    {
+        User newUser = new User();
+
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(user.getPassword());
+
+        Role addRole = roleService.findByName("user");
+        newUser.getRoles().add( new UserRoles(newUser, addRole));
+
+
+        userrepos.save(newUser);
+    }
+
+
+
+
     @Transactional
     @Override
     public User save(User user)
@@ -74,8 +95,7 @@ public class UserServiceImpl implements UserService
             .toLowerCase());
         newUser.setPasswordNoEncrypt(user.getPassword());
 
-        newUser.getRoles()
-            .clear();
+        newUser.getRoles().clear();
         for (UserRoles ur : user.getRoles())
         {
             Role addRole = roleService.findRoleById(ur.getRole()
@@ -84,15 +104,62 @@ public class UserServiceImpl implements UserService
                 .add(new UserRoles(newUser, addRole));
         }
 
+        newUser.getLists().clear();
+        for (UserToDoList tl : user.getLists())
+        {
+            ToDoList addList = tl.getTodolist();
+            newUser.getLists().add(new UserToDoList(newUser, addList));
+        }
+
         return userrepos.save(newUser);
     }
 
+    @Transactional
     @Override
     public User update(
         User user,
         long id)
     {
-        return null;
+        User currentUser = userrepos.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User " + id + "not found!"));
+
+        if (user.getUsername() != null)
+        {
+            currentUser.setUsername(user.getUsername()
+                .toLowerCase());
+        }
+
+        if (user.getPassword() != null)
+        {
+            currentUser.setPasswordNoEncrypt(user.getPassword());
+        }
+
+
+        if (user.getRoles()
+            .size() > 0)
+        {
+            currentUser.getRoles().clear();
+            for (UserRoles ur : user.getRoles())
+                {
+                    Role addRole = roleService.findRoleById(ur.getRole()
+                        .getRoleid());
+
+                    currentUser.getRoles()
+                        .add(new UserRoles(currentUser, addRole));
+                }
+        }
+
+        if(user.getLists().size() > 0)
+        {
+            currentUser.getLists().clear();
+            for (UserToDoList tl : user.getLists())
+                {
+                    ToDoList addList = tl.getTodolist();
+                    currentUser.getLists().add(new UserToDoList(currentUser, addList));
+                }
+        }
+
+        return userrepos.save(currentUser);
     }
 
     @Override
