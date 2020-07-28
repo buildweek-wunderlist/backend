@@ -14,45 +14,38 @@ public class Todo extends Auditable
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false,
-        unique = true)
     private long todoid;
 
     @Column(nullable = false)
     String description;
 
     @Column
-    String duedate;
+    String month;
+
+    @Column
+    int day;
 
     @Column
     private boolean completed;
 
     @ManyToOne
-    @JoinColumn(name = "todolistid"
-        , nullable = false)
-    @JsonIgnoreProperties(value = "todos", allowSetters = true)
+    @JoinColumn(name = "todolistid", nullable = false)
+    @JsonIgnoreProperties(value = "todos")
     private ToDoList todolist;
 
     public Todo()
     {
     }
 
-    public Todo(String description, ToDoList todolist
-    )
-    {
-        this.description = description;
-        this.todolist = todolist;
-        this.completed = false;
-    }
-
     public Todo(
         String description,
-        String duedate,
-        ToDoList todolist)
+        String month,
+        int day)
     {
         this.description = description;
-        this.duedate = duedate;
-        this.todolist = todolist;
+        this.month = month;
+        this.day = day;
+        this.completed = false;
     }
 
     public long getTodoid()
@@ -75,7 +68,27 @@ public class Todo extends Auditable
         this.description = description;
     }
 
-    public boolean getCompleted()
+    public String getMonth()
+    {
+        return month;
+    }
+
+    public void setMonth(String month)
+    {
+        this.month = month;
+    }
+
+    public int getDay()
+    {
+        return day;
+    }
+
+    public void setDay(int day)
+    {
+        this.day = day;
+    }
+
+    public boolean isCompleted()
     {
         return completed;
     }
@@ -85,12 +98,12 @@ public class Todo extends Auditable
         this.completed = completed;
     }
 
-    public ToDoList getToDoList()
+    public ToDoList getTodolist()
     {
         return todolist;
     }
 
-    public void setToDoList(ToDoList todolist)
+    public void setTodolist(ToDoList todolist)
     {
         this.todolist = todolist;
     }

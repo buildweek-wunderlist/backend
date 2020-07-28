@@ -4,6 +4,7 @@ import com.lambda.buildweek.wunderlist.models.Role;
 import com.lambda.buildweek.wunderlist.models.User;
 import com.lambda.buildweek.wunderlist.models.UserMinimum;
 import com.lambda.buildweek.wunderlist.models.UserRoles;
+import com.lambda.buildweek.wunderlist.repositories.UserRespository;
 import com.lambda.buildweek.wunderlist.services.RoleService;
 import com.lambda.buildweek.wunderlist.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class OpenController
     @Autowired
     private UserService userService;
 
+
     /**
      * A method in this controller adds a new user to the application with the role User so needs access to Role Services to do this.
      */
@@ -54,7 +56,7 @@ public class OpenController
      * This endpoint always anyone to create an account with the default role of USER. That role is hardcoded in this method.
      *
      * @param httpServletRequest the request that comes in for creating the new user
-     * @param newminuser         A special minimum set of data that is needed to create a new user
+     * @param newm    A special minimum set of data that is needed to create a new user
      * @return The token access and other relevent data to token access. Status of CREATED. The location header to look up the new user.
      * @throws URISyntaxException we create some URIs during this method. If anything goes wrong with that creation, an exception is thrown.
      */
@@ -63,7 +65,7 @@ public class OpenController
         produces = {"application/json"})
     public ResponseEntity<?> addSelf(
         HttpServletRequest httpServletRequest,
-        @Valid
+        //@Valid
         @RequestBody
             UserMinimum user)
         throws
@@ -76,10 +78,10 @@ public class OpenController
         newuser.setPassword(user.getPassword());
 
         // add the default role of user
-        /*Set<UserRoles> newRoles = new HashSet<>();
-        newRoles.add(new UserRoles(newuser,
-            roleService.findByName("user")));
-        newuser.setRoles(newRoles);*/
+//        Set<UserRoles> newRoles = new HashSet<>();
+//        newRoles.add(new UserRoles(newuser,
+//            roleService.findByName("user")));
+//        newuser.setRoles(newRoles);
 
         //Role newRole = roleService.findByName("user");
         //newuser.getRoles().add(new UserRoles(newuser, newRole));
@@ -88,7 +90,7 @@ public class OpenController
 
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/users/{userId}")
             .buildAndExpand(newuser.getUserid())
             .toUri();
         responseHeaders.setLocation(newUserURI);
