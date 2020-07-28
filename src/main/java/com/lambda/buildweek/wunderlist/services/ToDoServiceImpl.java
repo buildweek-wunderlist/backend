@@ -29,23 +29,6 @@ public class ToDoServiceImpl implements TodosService
     @Override
     public Todo save(Todo todo)
     {
-        Todo newToDo = new Todo();
-
-        newToDo.setTodoid(todo.getTodoid());
-
-        newToDo.setDescription(todo.getDescription());
-        newToDo.setCompleted(todo.getCompleted());
-
-        if (todo.getToDoList() != null)
-        {
-            ToDoList newList = todolistrepos.findById(todo.getToDoList().getTodolistid())
-            .orElseThrow(() -> new ResourceNotFoundException("Todo list " +
-                todo.getToDoList().getTodolistid() + "not found!"));
-
-            newToDo.setToDoList(newList);
-        }
-
-        return todorepos.save(newToDo);
-
+        return null;
     }
 }

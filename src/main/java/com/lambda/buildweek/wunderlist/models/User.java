@@ -34,14 +34,15 @@ public class User extends Auditable
     @OneToMany(mappedBy = "user",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    @JsonIgnoreProperties(value = "user",
+        allowSetters = true)
     private Set<UserRoles> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user",
     cascade = CascadeType.ALL,
     orphanRemoval = true)
     @JsonIgnoreProperties(value = "user", allowSetters = true)
-    private Set<UserToDoList> lists = new HashSet<>();
+    List<ToDoList> todolists = new ArrayList<>();
 
 
     public User()
@@ -121,7 +122,15 @@ public class User extends Auditable
         this.password = passwordEncoder.encode(password);
     }
 
+    public List<ToDoList> getTodolists()
+    {
+        return todolists;
+    }
 
+    public void setTodolists(List<ToDoList> todolists)
+    {
+        this.todolists = todolists;
+    }
 
     /**
      * Getter for user role combinations
@@ -142,6 +151,8 @@ public class User extends Auditable
     {
         this.roles = roles;
     }
+
+
 
     /**
      * Internally, user security requires a list of authorities, roles, that the user has. This method is a simple way to provide those.
@@ -165,13 +176,6 @@ public class User extends Auditable
         return rtnList;
     }
 
-    public Set<UserToDoList> getLists()
-    {
-        return lists;
-    }
-
-    public void setLists(Set<UserToDoList> lists)
-    {
-        this.lists = lists;
-    }
 }
+
+

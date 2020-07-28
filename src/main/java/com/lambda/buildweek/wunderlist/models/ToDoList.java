@@ -17,37 +17,34 @@ public class ToDoList extends Auditable
     private long todolistid;
 
     @Column
-    private String name;
-
-    @OneToMany(mappedBy = "todolist",
-    cascade = CascadeType.ALL,
-    orphanRemoval = true)
-    @JsonIgnoreProperties(value = "toDoList")
-    private List<Todo> todos = new ArrayList<>();
+    private String title;
 
     @OneToMany(mappedBy = "todolist",
         cascade = CascadeType.ALL,
         orphanRemoval = true)
-    @JsonIgnoreProperties(value = "todolist", allowSetters = true)
-    private Set<UserToDoList> users = new HashSet<>();
+    @JsonIgnoreProperties(value = "toDoList")
+    private List<Todo> todos = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "userid",
+    nullable = false)
+    private User user;
 
     public ToDoList()
     {
     }
 
-    public ToDoList(String name)
+    public ToDoList(String title)
     {
-        this.name = name;
+        this.title = title;
     }
 
     public ToDoList(
-        String name,
-        List<Todo> todos,
-        Set<UserToDoList> users)
+        String title,
+        User user)
     {
-        this.name = name;
-        this.todos = todos;
-        this.users = users;
+        this.title = title;
+        this.user = user;
     }
 
     public long getTodolistid()
@@ -60,6 +57,16 @@ public class ToDoList extends Auditable
         this.todolistid = todolistid;
     }
 
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
     public List<Todo> getTodos()
     {
         return todos;
@@ -70,23 +77,13 @@ public class ToDoList extends Auditable
         this.todos = todos;
     }
 
-    public Set<UserToDoList> getUsers()
+    public User getUser()
     {
-        return users;
+        return user;
     }
 
-    public void setUsers(Set<UserToDoList> users)
+    public void setUser(User user)
     {
-        this.users = users;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
+        this.user = user;
     }
 }

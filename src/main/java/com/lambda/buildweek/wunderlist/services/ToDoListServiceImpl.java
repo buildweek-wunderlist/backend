@@ -48,10 +48,35 @@ public class ToDoListServiceImpl implements ToDoListService
             .orElseThrow(() -> new ResourceNotFoundException("To do list id " + id + " cannot be found!"));
     }
 
+    @Transactional
     @Override
     public ToDoList save(ToDoList list)
     {
-        return todolistrepos.save(list);
+        ToDoList newToDoList = new ToDoList();
+
+        if(list.getTodolistid() != 0)
+        {
+            todolistrepos.findById(list.getTodolistid())
+                .orElseThrow(() -> new ResourceNotFoundException("List id " + list.getTodolistid() + "not found!"));
+        }
+
+        newToDoList.setTitle(list.getTitle());
+        newToDoList.getTodos().clear();
+        for( Todo t : list.getTodos())
+        {
+            Todo addTodo = new Todo();
+            addTodo.setTodoid(t.getTodoid());
+            addTodo.setDescription(t.getDescription());
+            addTodo.setDay(t.getDay());
+            addTodo.setCompleted(t.isCompleted());
+
+            newToDoList.getTodos().add(addTodo);
+        }
+
+        newToDoList.setUser(list.getUser());
+
+
+        return todolistrepos.save(newToDoList);
 
     }
 }

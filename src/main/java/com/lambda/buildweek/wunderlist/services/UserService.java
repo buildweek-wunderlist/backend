@@ -1,5 +1,6 @@
 package com.lambda.buildweek.wunderlist.services;
 
+import com.lambda.buildweek.wunderlist.models.ToDoList;
 import com.lambda.buildweek.wunderlist.models.User;
 import com.lambda.buildweek.wunderlist.models.UserMinimum;
 
@@ -14,6 +15,7 @@ public interface UserService
 
     User findByName(String name);
 
+    void addNewUserToDoList(long id, String title);
 
     void delete(long id);
 

@@ -65,17 +65,31 @@ public class UserServiceImpl implements UserService
     {
         User newUser = new User();
 
+        newUser.setUserid(user.getUserid());
+
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
 
-        Role addRole = roleService.findByName("user");
-        newUser.getRoles().add( new UserRoles(newUser, addRole));
+        Role newRole = roleService.findByName("user");
+        newUser.getRoles().add(new UserRoles(newUser, newRole));
 
 
-        userrepos.save(newUser);
+         userrepos.save(newUser);
     }
 
+    @Transactional
+    @Override
+    public void addNewUserToDoList(long id, String title)
+    {
+        ToDoList newList = new ToDoList();
+        newList = toDoListService.save(newList);
 
+        User user = userrepos.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Cannot find user!"));
+
+        //user.getLists().add(new UserToDoList(user, newList));
+        userrepos.save(user);
+    }
 
 
     @Transactional
@@ -104,13 +118,6 @@ public class UserServiceImpl implements UserService
                 .add(new UserRoles(newUser, addRole));
         }
 
-        newUser.getLists().clear();
-        for (UserToDoList tl : user.getLists())
-        {
-            ToDoList addList = tl.getTodolist();
-            newUser.getLists().add(new UserToDoList(newUser, addList));
-        }
-
         return userrepos.save(newUser);
     }
 
@@ -120,8 +127,10 @@ public class UserServiceImpl implements UserService
         User user,
         long id)
     {
+
         User currentUser = userrepos.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User " + id + "not found!"));
+
 
         if (user.getUsername() != null)
         {
@@ -149,15 +158,6 @@ public class UserServiceImpl implements UserService
                 }
         }
 
-        if(user.getLists().size() > 0)
-        {
-            currentUser.getLists().clear();
-            for (UserToDoList tl : user.getLists())
-                {
-                    ToDoList addList = tl.getTodolist();
-                    currentUser.getLists().add(new UserToDoList(currentUser, addList));
-                }
-        }
 
         return userrepos.save(currentUser);
     }

@@ -2,7 +2,6 @@ package com.lambda.buildweek.wunderlist.controllers;
 
 import com.lambda.buildweek.wunderlist.models.ToDoList;
 import com.lambda.buildweek.wunderlist.models.User;
-import com.lambda.buildweek.wunderlist.models.UserToDoList;
 import com.lambda.buildweek.wunderlist.services.ToDoListService;
 import com.lambda.buildweek.wunderlist.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +38,12 @@ public class ListController
 
     @PostMapping(value = "/{id}/new-list",
     consumes = "application/json")
-    public ResponseEntity<?> createNewList(@PathVariable long id, String name)
+    public ResponseEntity<?> createNewList(@PathVariable long id, ToDoList list)
     {
-            ToDoList newList = new ToDoList();
-            newList.setName(name);
-            toDoListService.save(newList);
-
-            User myUser = userService.findUserById(id);
-            myUser.getLists().add(new UserToDoList(myUser, newList));
-            userService.update(myUser, id);
+        ToDoList newList = new ToDoList(list.getTitle());
+        User user = userService.findUserById(id);
+        newList.setUser(user);
+        toDoListService.save(newList);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
