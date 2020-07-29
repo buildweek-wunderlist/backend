@@ -79,4 +79,26 @@ public class ToDoListServiceImpl implements ToDoListService
         return todolistrepos.save(newToDoList);
 
     }
+
+    @Override
+    public ToDoList update(ToDoList list, long id)
+    {
+
+       ToDoList currentList = todolistrepos.findById(id)
+           .orElseThrow(() -> new ResourceNotFoundException("List " + id + " not found!"));
+
+       if (list.getTitle() != null)
+       {
+           currentList.setTitle(list.getTitle());
+       }
+
+       return todolistrepos.save(currentList);
+
+    }
+
+    @Override
+    public void delete(long id)
+    {
+        todolistrepos.deleteById(id);
+    }
 }

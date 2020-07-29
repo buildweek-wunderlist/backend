@@ -11,7 +11,11 @@ public interface ToDoListService
 
     ToDoList findById(long id);
 
+    ToDoList update(ToDoList list, long id);
+
     List<ToDoList> findAll();
+
+    void delete(long id);
 
     void deleteAll();
 }

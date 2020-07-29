@@ -65,7 +65,7 @@ public class OpenController
         produces = {"application/json"})
     public ResponseEntity<?> addSelf(
         HttpServletRequest httpServletRequest,
-        //@Valid
+        @Valid
         @RequestBody
             UserMinimum user)
         throws
@@ -78,10 +78,10 @@ public class OpenController
         newuser.setPassword(user.getPassword());
 
         // add the default role of user
-//        Set<UserRoles> newRoles = new HashSet<>();
-//        newRoles.add(new UserRoles(newuser,
-//            roleService.findByName("user")));
-//        newuser.setRoles(newRoles);
+        //        Set<UserRoles> newRoles = new HashSet<>();
+        //        newRoles.add(new UserRoles(newuser,
+        //            roleService.findByName("user")));
+        //        newuser.setRoles(newRoles);
 
         //Role newRole = roleService.findByName("user");
         //newuser.getRoles().add(new UserRoles(newuser, newRole));
@@ -97,7 +97,7 @@ public class OpenController
 
 
         RestTemplate restTemplate = new RestTemplate();
-//        String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
+        //        String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
 
         String port = "";
         if (httpServletRequest.getServerName()
