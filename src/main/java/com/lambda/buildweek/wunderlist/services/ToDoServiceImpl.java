@@ -60,13 +60,14 @@ public class ToDoServiceImpl implements TodosService
 
     @Transactional
     @Override
-    public void markComplete(long todoid)
+    public Todo markComplete(long todoid)
     {
         Todo t = new Todo();
         t = todorepos.findById(todoid)
             .orElseThrow(() -> new ResourceNotFoundException("To Do Item " + todoid  + "Not Found!"));
         t.setCompleted(true);
-        todorepos.save(t);
+
+        return todorepos.save(t);
     }
 
     @Override

@@ -9,7 +9,7 @@ public interface TodosService
 {
     Todo save(Todo todo, long listid);
 
-    void markComplete(long todoid);
+    Todo markComplete(long todoid);
 
     Todo update(Todo todo, long todoid);
 

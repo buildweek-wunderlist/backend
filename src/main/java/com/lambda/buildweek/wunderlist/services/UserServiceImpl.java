@@ -38,7 +38,8 @@ public class UserServiceImpl implements UserService
         return userrepos.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found"));
     }
-    @Override
+
+ /*   @Override
     public User findByName(String name)
     {
         User uu = userrepos.findByUsername(name.toLowerCase());
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService
             throw new ResourceNotFoundException("User name " + name + " not found!");
         }
         return uu;
-    }
+    }*/
 
     @Transactional
     @Override
@@ -70,6 +71,7 @@ public class UserServiceImpl implements UserService
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
 
+
         Role newRole = roleService.findByName("user");
         newUser.getRoles().add(new UserRoles(newUser, newRole));
 
@@ -77,7 +79,7 @@ public class UserServiceImpl implements UserService
          userrepos.save(newUser);
     }
 
-    @Transactional
+  /*  @Transactional
     @Override
     public void addNewUserToDoList(long id, String title)
     {
@@ -89,7 +91,7 @@ public class UserServiceImpl implements UserService
 
         //user.getLists().add(new UserToDoList(user, newList));
         userrepos.save(user);
-    }
+    }*/
 
 
     @Transactional
@@ -165,6 +167,6 @@ public class UserServiceImpl implements UserService
     @Override
     public void deleteAll()
     {
-
+        userrepos.deleteAll();
     }
 }
