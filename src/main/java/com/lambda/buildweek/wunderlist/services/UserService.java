@@ -13,17 +13,13 @@ public interface UserService
 
     User findUserById(long id);
 
-    User findByName(String name);
-
-    void addNewUserToDoList(long id, String title);
 
     void delete(long id);
 
+    User save(User user);
+
 
     void saveNewUser(User user);
-
-
-    User save(User user);
 
 
     User update(

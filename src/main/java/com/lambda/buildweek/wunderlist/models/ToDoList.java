@@ -28,6 +28,7 @@ public class ToDoList extends Auditable
     @ManyToOne
     @JoinColumn(name = "userid",
     nullable = false)
+    @JsonIgnoreProperties(value = "todolists")
     private User user;
 
     public ToDoList()

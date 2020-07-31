@@ -63,7 +63,7 @@ public class UserController
                           URISyntaxException
     {
         newuser.setUserid(0);
-        newuser = userService.save(newuser);
+        userService.saveNewUser(newuser);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -88,7 +88,7 @@ public class UserController
             long userid)
     {
         updateUser.setUserid(userid);
-        userService.save(updateUser);
+        userService.update(updateUser, userid);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

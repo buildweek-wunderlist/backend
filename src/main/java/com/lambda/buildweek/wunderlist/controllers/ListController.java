@@ -36,16 +36,34 @@ public class ListController
             HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{id}/new-list",
+    @PostMapping(value = "/{userid}/new-list",
     consumes = "application/json")
-    public ResponseEntity<?> createNewList(@PathVariable long id, ToDoList list)
+    public ResponseEntity<?> createNewList(@PathVariable long userid, @RequestBody ToDoList list)
     {
         ToDoList newList = new ToDoList(list.getTitle());
-        User user = userService.findUserById(id);
+        User user = userService.findUserById(userid);
         newList.setUser(user);
-        toDoListService.save(newList);
+        newList = toDoListService.save(newList);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(newList, HttpStatus.CREATED);
+    }
+
+
+    @PutMapping(value = "/update-list/{listid}",
+        consumes = "application/json")
+    public ResponseEntity<?> updateList (@PathVariable long listid, @RequestBody ToDoList list)
+    {
+        toDoListService.update(list, listid);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/delete/{listid}")
+    public ResponseEntity<?> deleteList (@PathVariable long listid)
+    {
+        toDoListService.delete(listid);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

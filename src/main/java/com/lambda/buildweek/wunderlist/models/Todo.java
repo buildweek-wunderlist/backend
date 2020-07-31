@@ -23,14 +23,14 @@ public class Todo extends Auditable
     String month;
 
     @Column
-    int day;
+    String day;
 
     @Column
     private boolean completed;
 
     @ManyToOne
     @JoinColumn(name = "todolistid", nullable = false)
-    @JsonIgnoreProperties(value = "todos")
+    @JsonIgnoreProperties(value = {"todos", "user"})
     private ToDoList todolist;
 
     public Todo()
@@ -40,13 +40,17 @@ public class Todo extends Auditable
     public Todo(
         String description,
         String month,
-        int day)
+        String day)
     {
         this.description = description;
         this.month = month;
         this.day = day;
-        this.completed = false;
     }
+
+
+
+
+
 
     public long getTodoid()
     {
@@ -78,12 +82,12 @@ public class Todo extends Auditable
         this.month = month;
     }
 
-    public int getDay()
+    public String getDay()
     {
         return day;
     }
 
-    public void setDay(int day)
+    public void setDay(String day)
     {
         this.day = day;
     }
